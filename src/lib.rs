@@ -157,7 +157,7 @@ where
     }
 
     /// Read the compensated pressure.
-    fn _read_pressure(&mut self, i2c: &mut I2C) -> Result<i32, Error> {
+    fn _read_pressure(&mut self, i2c: &mut I2C) -> Result<u32, Error> {
         let raw_pressure = self._read_raw_pressure(i2c)?;
 
         let compensated_pressure = Self::compensate_pressure(
@@ -293,7 +293,7 @@ where
         raw_pressure: i32,
         t_fine: i32,
         pressure_calibration_data: &PressureCalibrationData,
-    ) -> i32 {
+    ) -> u32 {
         let t_fine = t_fine as i64;
 
         let var1 = t_fine - 128000;
@@ -314,7 +314,7 @@ where
         let var1 = ((pressure_calibration_data.p9 as i64) * (p >> 13) * (p >> 13)) >> 25;
         let var2 = ((pressure_calibration_data.p8 as i64) * p) >> 19;
         let p = ((p + var1 + var2) >> 8) + ((pressure_calibration_data.p7 as i64) << 4);
-        p as i32
+        p as u32
     }
 }
 
@@ -339,7 +339,7 @@ where
     }
 
     /// Read the compensated pressure.
-    pub fn read_pressure(&mut self, i2c: &mut I2C) -> Result<i32, Error> {
+    pub fn read_pressure(&mut self, i2c: &mut I2C) -> Result<u32, Error> {
         Self::_read_pressure(self, i2c)
     }
 
@@ -417,7 +417,7 @@ where
     ///
     /// Call `trigger_measurement` before calling this.
     /// NB You need to allow time for the measurement to complete!
-    pub fn read_pressure(&mut self, i2c: &mut I2C) -> Result<i32, Error> {
+    pub fn read_pressure(&mut self, i2c: &mut I2C) -> Result<u32, Error> {
         Self::_read_pressure(self, i2c)
     }
 
