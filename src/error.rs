@@ -1,7 +1,9 @@
 use snafu::Snafu;
+#[cfg(feature = "defmt")]
 use defmt::Format;
 
-#[derive(Debug, Snafu, Format)]
+#[cfg_attr(feature = "defmt", derive(Format))]
+#[derive(Debug, Snafu)]
 #[snafu(visibility = "pub(crate)")]
 pub enum Error {
     IncorrectDeviceId,
